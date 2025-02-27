@@ -3,15 +3,7 @@ import sys
 import random
 
 def likelihood_weighting(num_samples, evidence):
-    """
-    Run likelihood weighting on the umbrella network.
-    
-    :param num_samples: Number of samples to generate.
-    :param evidence: List of booleans for evidence u_1,...,u_10.
-    :return: Estimate of P(R_10=True | evidence).
-    """
     T = len(evidence)
-    # Define model parameters.
     prior = {True: 0.5, False: 0.5}
     trans = {
         True: {True: 0.7, False: 0.3},
@@ -27,15 +19,10 @@ def likelihood_weighting(num_samples, evidence):
     
     for _ in range(num_samples):
         weight = 1.0
-        # Sample initial state R0.
         r = True if random.random() < prior[True] else False
-        # For each time step, propagate and update weight.
         for t in range(T):
-            # Sample next state R_t.
             r = True if random.random() < trans[r][True] else False
-            # Update weight using sensor model for observed evidence.
             weight *= sensor[r][evidence[t]]
-        # Accumulate weights.
         if r:
             total_weight_true += weight
         total_weight += weight
@@ -43,8 +30,8 @@ def likelihood_weighting(num_samples, evidence):
 
 def main():
     if len(sys.argv) < 12:
-        print("Usage: python3 weight_umbrella.py <num_samples> <10 evidence values as T or F>")
-        sys.exit(1)
+        print("Less than 10 evidence")
+        return
     num_samples = int(sys.argv[1])
     evidence = [arg.upper() == 'T' for arg in sys.argv[2:12]]
     

@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
 import sys
 
 def main():
-    # Read evidence from command-line arguments.
     evidence = sys.argv[1:]
     if not evidence:
-        print("Usage: python3 mls_hmm.py <evidence as T or F>")
-        sys.exit(1)
+        print("No evidence")
+        return
     e = [x.upper() == 'T' for x in evidence]
     n = len(e)
     
@@ -21,12 +19,9 @@ def main():
         False: {True: 0.3, False: 0.7}
     }
     
-    # v[t] holds the maximum probability of any path ending in each state at time t.
-    # backpointer[t] stores the previous state leading to the best path.
     v = []
     backpointer = []
-    
-    # Time t = 1: consider all possibilities from X0.
+
     v1 = {}
     bp1 = {}
     for x in [True, False]:
@@ -38,11 +33,10 @@ def main():
                 best_prob = prob
                 best_prev = prev
         v1[x] = best_prob
-        bp1[x] = best_prev  # This backpointer points to the best X0 for state x at time 1.
+        bp1[x] = best_prev
     v.append(v1)
     backpointer.append(bp1)
     
-    # For t = 2 to n.
     for t in range(1, n):
         vt = {}
         bpt = {}
@@ -59,16 +53,13 @@ def main():
         v.append(vt)
         backpointer.append(bpt)
     
-    # Backtrack: find the state at time n with the highest probability.
     last_state = max(v[n-1], key=v[n-1].get)
     path = [None] * n
     path[n-1] = last_state
     
-    # Reconstruct the most likely path backwards.
     for t in range(n-1, 0, -1):
         path[t-1] = backpointer[t][path[t]]
     
-    # Convert boolean states to 'T'/'F' for printing.
     result = ['T' if state else 'F' for state in path]
     print(result)
 
