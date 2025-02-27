@@ -22,21 +22,14 @@ def main():
     v = []
     backpointer = []
 
-    v1 = {}
-    bp1 = {}
+    v0 = {}
+    bp0 = {}
     for x in [True, False]:
-        best_prob = 0.0
-        best_prev = None
-        for prev in [True, False]:
-            prob = prior[prev] * trans[prev][x] * sensor[x][e[0]]
-            if prob > best_prob:
-                best_prob = prob
-                best_prev = prev
-        v1[x] = best_prob
-        bp1[x] = best_prev
-    v.append(v1)
-    backpointer.append(bp1)
-    
+        v0[x] = prior[x] * sensor[x][e[0]]
+        bp0[x] = None
+    v.append(v0)
+    backpointer.append(bp0)
+
     for t in range(1, n):
         vt = {}
         bpt = {}
