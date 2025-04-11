@@ -4,7 +4,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 from tqdm import tqdm
 import pickle
-
+'''
+Based on agent from https://gymnasium.farama.org/introduction/train_agent/
+'''
 class TaxiQLearningAgent:
     def __init__(
         self,
