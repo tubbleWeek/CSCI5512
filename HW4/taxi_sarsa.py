@@ -29,7 +29,7 @@ class TaxiQLearningAgent:
             discount_factor: The discount factor for computing the Q-value
         """
         self.env = env
-        self.q_values = defaultdict(lambda: np.zeros(env.action_space.n))
+        self.q_values = defaultdict(self.zero_array)
 
         self.lr = learning_rate
         self.discount_factor = discount_factor
@@ -39,7 +39,8 @@ class TaxiQLearningAgent:
         self.final_epsilon = final_epsilon
 
         self.training_error = []
-
+    def zero_array(self):
+            return np.zeros(self.env.action_space.n)
     def get_action(self, obs: tuple[int, int, bool]) -> int:
         """
         Returns the best action with probability (1 - epsilon)
@@ -74,6 +75,9 @@ class TaxiQLearningAgent:
 
     def decay_epsilon(self):
         self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
+    
+    def get_qvals(self):
+        return self.q_values
 
 # hyperparameters
 # learning_rate = 0.005
@@ -113,6 +117,24 @@ for episode in tqdm(range(n_episodes)):
         done = terminated or truncated
         obs = next_obs
     agent.decay_epsilon()
+
+'''
+Write learned policy to pickle
+'''
+
+# dict with dict as value
+with open("sarsa_q_vals.pickle", "w") as f:
+    q_vals = agent.get_qvals()
+    q_vals = pickle.dumps(q_vals)
+    pickle.dump(q_vals, f)
+
+
+# just dict
+with open("sarsa_policy.pickle", "w") as f:
+    q_vals = agent.get_qvals()
+    for state in q_vals:
+        pickle.dump(q_vals[state], f)
+
 
 '''
 Ploting pretty graphs
