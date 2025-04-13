@@ -129,14 +129,14 @@ def main(exploration_param, learning_rt, discount_f):
     '''
 
     # dict with dict as value
-    with open("sarsa_q_vals.pickle", "w") as f:
+    with open("sarsa_q_vals.pickle", "wb") as f:
         q_vals = agent.get_qvals()
         q_vals = pickle.dumps(q_vals)
         pickle.dump(q_vals, f)
 
 
     # just dict
-    with open("sarsa_policy.pickle", "w") as f:
+    with open("sarsa_policy.pickle", "wb") as f:
         q_vals = agent.get_qvals()
         for state in q_vals:
             pickle.dump(q_vals[state], f)
