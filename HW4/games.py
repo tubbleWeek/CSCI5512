@@ -211,4 +211,9 @@ class FictitiousPlay:
         self.opp_movelist = []
 
 
-    
+def main():
+    # implement main game loop
+    return None
+
+if __name__ == "__main__":
+    main()
