@@ -114,7 +114,53 @@ class TitForTat:
     
     def clear_movelist(self):
         self.opp_movelist = []
+class Bully:
+    def __init__(
+        self
+    ):
+        # self.time = 0
+        self.score_dict = {}
+
+    def get_action(self, game):
+        # move_sequence = game.get_plays()
+        possible_moves = []
+        for move in combinations(game.get_move()):
+            possible_moves.append(move)
+        for move in possible_moves:
+            reward = game.playout(move)
+        
+        action = None
+        if len(self.opp_movelist) == 0 and len(move_sequence) == 0:
+            action = np.random.choice(game.get_moves())
+        else:
+            self.opp_movelist.append(move_sequence[len(move_sequence)])
+            action = self.opp_movelist[len(self.opp_movelist)]
+        assert type(action) == str
+        return action
     
+    def clear_movelist(self):
+        self.opp_movelist = []
+
+class GodFather:
+    def __init__(
+        self
+    ):
+          # self.time = 0
+        self.opp_movelist = []
+
+    def get_action(self, game):
+        move_sequence = game.get_plays()
+        action = None
+        if len(self.opp_movelist) == 0 and len(move_sequence) == 0:
+            action = np.random.choice(game.get_moves())
+        else:
+            self.opp_movelist.append(move_sequence[len(move_sequence)])
+            action = self.opp_movelist[len(self.opp_movelist)]
+        assert type(action) == str
+        return action
+    
+    def clear_movelist(self):
+        self.opp_movelist = []
 class FictitiousPlay:
     def __init__(
         self
