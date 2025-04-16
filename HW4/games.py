@@ -77,12 +77,7 @@ class MovieSelection:
         # self.time = 0
         self.move_list = []
 
-        def playout(agentA, agentB):
-            agentA_action = agentA.get_action(self)
-            self.move_list.append(agentA_action)
-            # time += 1
-            agentB_action = agentB.get_action(self)
-            self.move_list.append(agentB_action)
+        def playout(agentA_action, agentB_action):
             return self.value_dict[(agentA_action, agentB_action)]
         
         def get_moves():
