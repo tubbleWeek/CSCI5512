@@ -213,6 +213,28 @@ class FictitiousPlay:
 
 def main():
     # implement main game loop
+    T = 100
+    chicken = Chicken()
+    prisoner = PrisonersDilema()
+    movie = MovieSelection()
+    tittat = TitForTat()
+    bull = Bully()
+    god = GodFather()
+    fic = FictitiousPlay()
+    games = [chicken, prisoner, movie]
+    players = combinations([tittat, bull, god, fic])
+    results = []
+    for game in games:
+        for player in players:
+            total_reward = [0, 0]
+            for _ in range(0, T):
+                action_A = player[0].get_action(game)
+                action_B = player[1].get_action(game)
+                reward = game.playout(action_A, action_B)
+                total_reward[0] += reward[0]
+                total_reward[1] += reward[1]
+            total_reward /= T
+        results.apped(f"{game}:{total_reward}")
     return None
 
 if __name__ == "__main__":
