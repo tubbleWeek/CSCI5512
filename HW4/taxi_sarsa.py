@@ -132,7 +132,7 @@ def main(exploration_param, learning_rt, discount_f):
     q_vals = agent.get_qvals()
     policy = {state: int(np.argmax(q_vals[state])) for state in q_vals}
     q_vals_dict = {state: {action: float(q_vals[state][action]) for action in range(6)} for state in q_vals}
-    with open("sarsa_q_vals.pickle", "wb") as f:
+    with open("sarsa_qvals.pickle", "wb") as f:
         pickle.dump(q_vals_dict, f)
     # just dict
     with open("sarsa_policy.pickle", "wb") as f:

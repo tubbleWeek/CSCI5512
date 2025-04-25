@@ -139,9 +139,6 @@ class Bully:
             return "Straight"
         elif isinstance(game, MovieSelection):
             return "Action"
-        else:
-            # Default to the first available move if unknown game
-            return np.random.choice(game.get_moves())
 
 class GodFather:
     def __init__(self):
@@ -168,46 +165,37 @@ class GodFather:
         
         # Game-specific strategies
         if isinstance(game, PrisonersDilema):
-            return self._prisoners_dilemma_strategy(last_opponent_move, history)
+            return self.prisoners_dilemma_strategy(last_opponent_move, history)
         elif isinstance(game, Chicken):
-            return self._chicken_strategy(last_opponent_move, history)
+            return self.chicken_strategy(last_opponent_move, history)
         elif isinstance(game, MovieSelection):
-            return self._movie_strategy(last_opponent_move, history)
-        else:
-            return game.moves[0]
+            return self.movie_strategy(last_opponent_move, history)
 
-    def _prisoners_dilemma_strategy(self, last_opponent_move, history):
-        # Initial aggressive move
+    def prisoners_dilemma_strategy(self, last_opponent_move, history):
         if not last_opponent_move:
             return "Testify"
         
-        # Forgive occasional defections within grace period
         if last_opponent_move == "Refuse":
             history['grace_remaining'] = self.grace_periods[PrisonersDilema]
             return "Refuse"
             
-        # Retaliate against defections but allow recovery
         if history['grace_remaining'] > 0:
             history['grace_remaining'] -= 1
             return "Refuse"
             
         return "Testify"
 
-    def _chicken_strategy(self, last_opponent_move, history):
-        # Initial aggressive posture
+    def chicken_strategy(self, last_opponent_move, history):
         if not last_opponent_move:
             return "Straight"
         
-        # Crush weakness but avoid mutual destruction
         if last_opponent_move == "Swerve":
             return "Straight"
             
-        # Strategic retreat after opponent defiance
         history['grace_remaining'] = self.grace_periods[Chicken]
         return "Swerve"
 
-    def _movie_strategy(self, last_opponent_move, history):
-        # Establish dominance first
+    def movie_strategy(self, last_opponent_move, history):
         if not last_opponent_move:
             return "Action"
         
@@ -312,11 +300,9 @@ def print_results(results):
         print(f"\nGame: {game_name}")
         agents = list({a for a, _ in score_matrix.keys()})
         
-        # Print matrix header
         print("|            | " + " | ".join(f"{agent.__class__.__name__:^15}" for agent in agents) + " |")
         print("|------------|" + "|".join(["-----------------"] * len(agents)) + "|")
         
-        # Print rows
         for agent_a in agents:
             row = [f"{agent_a.__class__.__name__:<11} |"]
             for agent_b in agents:
@@ -324,7 +310,6 @@ def print_results(results):
                 row.append(f" {alpha:.2f}, {beta:.2f} ")
             print("|" + "|".join(row) + "|")
 
-# Updated main section
 if __name__ == "__main__":
     agents = [
         TitForTat(),

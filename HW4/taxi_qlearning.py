@@ -122,19 +122,15 @@ def main(exploration_param, learning_rt, discount_f):
     '''
     Write learned policy to pickle
     '''
-
-    # dict with dict as value
-    with open("qlearning_q_vals.pickle", "wb") as f:
-        q_vals = agent.get_qvals()
-        q_vals = pickle.dumps(q_vals)
-        pickle.dump(q_vals, f)
-
-
+    q_vals = agent.get_qvals()
+    policy = {state: int(np.argmax(q_vals[state])) for state in q_vals}
+    q_vals_dict = {state: {action: float(q_vals[state][action]) for action in range(6)} for state in q_vals}
+    
+    with open("qlearning_qvals.pickle", "wb") as f:
+        pickle.dump(q_vals_dict, f)
     # just dict
     with open("qlearning_policy.pickle", "wb") as f:
-        q_vals = agent.get_qvals()
-        for state in q_vals:
-            pickle.dump(q_vals[state], f)
+        pickle.dump(policy, f)
     
     '''Random Agent'''
     rand_env = gym.make("Taxi-v3")
