@@ -84,7 +84,7 @@ class TaxiQLearningAgent:
 def main(exploration_param, learning_rt, discount_f):
     # hyperparameters
     learning_rate = learning_rt
-    n_episodes = 100_00
+    n_episodes = 100_000_0
     start_epsilon = exploration_param
     epsilon_decay = start_epsilon / (n_episodes / 2)  # reduce the exploration over time
     final_epsilon = 0.1
@@ -118,7 +118,7 @@ def main(exploration_param, learning_rt, discount_f):
             # update if the environment is done and the current obs
             done = terminated or truncated
             obs = next_obs
-        # agent.decay_epsilon()
+        agent.decay_epsilon()
     '''
     Write learned policy to pickle
     '''
@@ -138,14 +138,14 @@ def main(exploration_param, learning_rt, discount_f):
     
     '''Random Agent'''
     rand_env = gym.make("Taxi-v3")
-    rand_env = gym.wrappers.RecordEpisodeStatistics(rand_env, buffer_length=n_episodes)
-    for episode in tqdm(range(n_episodes)):
+    rand_env = gym.wrappers.RecordEpisodeStatistics(rand_env, buffer_length=10000)
+    for episode in tqdm(range(10000)):
         obs, info = rand_env.reset()
         done = False
         # print(rand_env.action_space.sample())
         # play one episode
         while not done:
-            action = env.action_space.sample()
+            action = rand_env.action_space.sample()
             next_obs, reward, terminated, truncated, info = rand_env.step(action)
 
             # update if the environment is done and the current obs
@@ -197,8 +197,9 @@ def main(exploration_param, learning_rt, discount_f):
     )
     axs[1].plot(range(len(random_enviroment_rewards)), random_enviroment_rewards)
     plt.tight_layout()
-    # plt.show()
     plt.savefig("qlearning total reward.png", transparent=False)
+    plt.show()
+    
 
 if __name__ == "__main__":
     exploration_parameter = (float)(sys.argv[1])
